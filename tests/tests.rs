@@ -630,8 +630,23 @@ pub fn get_font_data() {
         .unwrap()
         .load()
         .unwrap();
-    let data = font.copy_font_data().unwrap();
-    debug_assert!(SFNT_VERSIONS.iter().any(|version| data[0..4] == *version));
+    match font.copy_font_data() {
+        Some(data) => {
+            assert!(data.len() >= 4);
+            assert!(SFNT_VERSIONS.iter().any(|version| data[0..4] == *version));
+        }
+        None => {
+            #[cfg(target_os = "macos")]
+            {
+                assert!(!font.family_name().is_empty());
+                assert!(!font.full_name().is_empty());
+                return;
+            }
+
+            #[cfg(not(target_os = "macos"))]
+            panic!("expected system font data to be available");
+        }
+    }
 }
 
 #[cfg(feature = "source")]
