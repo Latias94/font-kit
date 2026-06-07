@@ -14,6 +14,7 @@ use core_foundation::array::CFArray;
 use core_foundation::base::{CFType, TCFType};
 use core_foundation::dictionary::CFDictionary;
 use core_foundation::string::CFString;
+use core_text::font::new_from_descriptor;
 use core_text::font_collection::{self, CTFontCollection};
 use core_text::font_descriptor::{self, CTFontDescriptor};
 use core_text::font_manager;
