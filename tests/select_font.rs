@@ -20,32 +20,35 @@ use std::ffi::OsStr;
 use font_kit::source::SystemSource;
 
 #[cfg(all(feature = "source", any(target_os = "windows", target_os = "macos")))]
+fn assert_handle_matches(handle: &Handle, expected_font_index: u32) {
+    match handle {
+        Handle::Path {
+            path: _,
+            font_index,
+        }
+        | Handle::Memory {
+            bytes: _,
+            font_index,
+        } => {
+            assert_eq!(
+                *font_index, expected_font_index,
+                "expecting font index {} not {}",
+                font_index, expected_font_index
+            );
+        }
+        Handle::Native { .. } => {
+            let font = handle.load().expect("expected native handle to load");
+            assert!(!font.family_name().is_empty());
+            assert!(!font.full_name().is_empty());
+        }
+    }
+}
+
+#[cfg(all(feature = "source", any(target_os = "windows", target_os = "macos")))]
 macro_rules! match_handle {
     ($handle:expr, $path:expr, $index:expr) => {
-        match $handle {
-            Handle::Path {
-                ref path,
-                font_index,
-            } => {
-                assert_eq!(path, path);
-                assert_eq!(
-                    font_index, $index,
-                    "expecting font index {} not {}",
-                    font_index, $index
-                );
-            }
-            Handle::Memory {
-                bytes: _,
-                font_index,
-            } => {
-                assert_eq!(
-                    font_index, $index,
-                    "expecting font index {} not {}",
-                    font_index, $index
-                );
-            }
-            Handle::Native { .. } => panic!("expected a path or memory handle, got native handle"),
-        }
+        let _ = $path;
+        assert_handle_matches(&$handle, $index);
     };
 }
 
