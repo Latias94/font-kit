@@ -1,15 +1,23 @@
 [package]
-name = "font-kit"
+name = "open-gpui-font-kit"
 version = "0.14.3"
-authors = ["Patrick Walton <pcwalton@mimiga.net>"]
-description = "A cross-platform font loading library"
+authors = [
+    "Patrick Walton <pcwalton@mimiga.net>",
+    "Mingzhen Zhuang <superfrankie621@gmail.com>",
+]
+description = "Open GPUI-maintained fork of the font-kit cross-platform font loading library."
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/servo/font-kit"
-homepage = "https://github.com/servo/font-kit"
+repository = "https://github.com/Latias94/font-kit"
+homepage = "https://github.com/Latias94/font-kit"
+documentation = "https://docs.rs/open-gpui-font-kit"
 exclude = ["resources/**"]
 edition = "2018"
 rust-version = "1.77"
+
+[lib]
+name = "font_kit"
+path = "src/lib.rs"
 
 [features]
 default = ["source"]

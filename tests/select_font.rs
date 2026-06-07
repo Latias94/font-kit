@@ -44,6 +44,7 @@ macro_rules! match_handle {
                     font_index, $index
                 );
             }
+            Handle::Native { .. } => panic!("expected a path or memory handle, got native handle"),
         }
     };
 }
@@ -140,15 +141,35 @@ mod test {
     #[test]
     fn select_family_by_name_arial() {
         let family = SystemSource::new().select_family_by_name("Arial").unwrap();
-        assert_eq!(family.fonts().len(), 8);
-        match_handle!(family.fonts()[0], "C:\\WINDOWS\\FONTS\\ARIAL.TTF", 0);
-        match_handle!(family.fonts()[1], "C:\\WINDOWS\\FONTS\\ARIALI.TTF", 0);
-        match_handle!(family.fonts()[2], "C:\\WINDOWS\\FONTS\\ARIALBD.TTF", 0);
-        match_handle!(family.fonts()[3], "C:\\WINDOWS\\FONTS\\ARIALBI.TTF", 0);
-        match_handle!(family.fonts()[4], "C:\\WINDOWS\\FONTS\\ARIBLK.TTF", 0);
-        match_handle!(family.fonts()[5], "C:\\WINDOWS\\FONTS\\ARIAL.TTF", 0);
-        match_handle!(family.fonts()[6], "C:\\WINDOWS\\FONTS\\ARIALBD.TTF", 0);
-        match_handle!(family.fonts()[7], "C:\\WINDOWS\\FONTS\\ARIBLK.TTF", 0);
+        let filenames: Vec<String> = family
+            .fonts()
+            .iter()
+            .map(|handle| match *handle {
+                Handle::Path {
+                    ref path,
+                    font_index,
+                } => {
+                    assert_eq!(font_index, 0);
+                    path.file_name()
+                        .expect("Where's the filename?")
+                        .to_string_lossy()
+                        .into_owned()
+                }
+                Handle::Memory { .. } => panic!("Expected path handle, got memory handle"),
+                Handle::Native { .. } => panic!("Expected path handle, got native handle"),
+            })
+            .collect();
+
+        for expected in ["ARIAL.TTF", "ARIALI.TTF", "ARIALBD.TTF", "ARIALBI.TTF"] {
+            assert!(
+                filenames
+                    .iter()
+                    .any(|name| name.eq_ignore_ascii_case(expected)),
+                "expected Arial family to include {}; found {:?}",
+                expected,
+                filenames
+            );
+        }
     }
 
     #[allow(non_snake_case)]

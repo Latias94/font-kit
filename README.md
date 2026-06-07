@@ -1,8 +1,12 @@
-# font-kit
+# open-gpui-font-kit
 
-[![Build Status](https://github.com/servo/font-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/servo/font-kit/actions)
-[![crates.io](https://img.shields.io/crates/v/font-kit.svg)](https://crates.io/crates/font-kit)
-[![Documentation](https://docs.rs/font-kit/badge.svg)](https://docs.rs/font-kit)
+[![Build Status](https://github.com/Latias94/font-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Latias94/font-kit/actions)
+[![crates.io](https://img.shields.io/crates/v/open-gpui-font-kit.svg)](https://crates.io/crates/open-gpui-font-kit)
+[![Documentation](https://docs.rs/open-gpui-font-kit/badge.svg)](https://docs.rs/open-gpui-font-kit)
+
+This crate is an Open GPUI-maintained fork of Servo's [`font-kit`](https://github.com/servo/font-kit).
+The published package is named `open-gpui-font-kit`, while the Rust library crate remains
+`font_kit` for source compatibility.
 
 `font-kit` provides a common interface to the various system font libraries and provides
 services such as finding fonts on the system, performing nearest-font matching, and rasterizing
@@ -113,6 +117,12 @@ included.
 
 ## License
 
-`font-kit` is licensed under the same terms as Rust itself.
+`open-gpui-font-kit` is licensed under the same terms as Rust itself, preserving the upstream
+`font-kit` MIT OR Apache-2.0 license.
+
+## Credits
+
+This fork builds on Servo's [`font-kit`](https://github.com/servo/font-kit). Open GPUI maintains
+this package for compatibility with the Open GPUI crate ecosystem.
 
 [CSS Fonts Module Level 3]: https://drafts.csswg.org/css-fonts-3/#font-matching-algorithm
